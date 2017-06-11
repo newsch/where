@@ -1,0 +1,11 @@
+h1, h3 {
+  text-align: center;
+  margin: auto;
+  list-style: none;
+}
+
+h1 {
+  font-size: 50vh;
+  line-height: 0.8;
+  margin-top: 20vh;
+}

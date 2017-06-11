@@ -29,7 +29,7 @@ def find_route(location):
     if (location in test_locations):
         return redirect(test_locations[location])
     else:
-        return "that's not in our database :("
+        return render_template('404.html'), 404
 
 @app.route('/add')
 def add_route():
@@ -47,6 +47,10 @@ def remove_routes():
         return redirect('/')
     else:
         return render_template('remove_routes.html', routes=test_locations)
+
+@app.route('/404')
+def no_page():
+    return render_template('404.html')
 
 if __name__ == '__main__':
     app.debug = True  # updates the page as the code is saved
