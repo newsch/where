@@ -3,13 +3,14 @@
 import os
 from flask import Flask, request
 from flask import render_template, redirect, url_for
+from locations import sample_locations
 import pdb
 
 app = Flask(__name__)
 
-from locations import sample_locations
 
 test_locations = sample_locations.copy()
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -24,6 +25,7 @@ def index():
     else:
         return render_template('index.html', routes=test_locations)
 
+
 @app.route('/<location>')
 def find_route(location):
     if (location in test_locations):
@@ -31,9 +33,11 @@ def find_route(location):
     else:
         return render_template('404.html'), 404
 
+
 @app.route('/add')
 def add_route():
     return render_template('add_route.html')
+
 
 @app.route('/remove', methods=['POST', 'GET'])
 def remove_routes():
@@ -48,9 +52,11 @@ def remove_routes():
     else:
         return render_template('remove_routes.html', routes=test_locations)
 
+
 @app.route('/404')
 def no_page():
     return render_template('404.html')
+
 
 if __name__ == '__main__':
     app.debug = True  # updates the page as the code is saved
