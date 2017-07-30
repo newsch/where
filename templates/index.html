@@ -7,9 +7,9 @@
   <body>
     <h1>where</h1>
     <ul>
-      {% for name, destination in routes.items() %}
+      {% for location in locations %}
         <li>
-          <p>{{name}}: <a href={{destination}}>{{destination}}</a></p>
+          <p>{{location.name}}: <a href={{location.link}}>{{location.link}}</a></p>
         </li>
       {% endfor %}
   </ul>

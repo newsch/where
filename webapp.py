@@ -3,13 +3,31 @@
 import os
 from flask import Flask, request
 from flask import render_template, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 from locations import sample_locations
+
 import pdb
 
+
 app = Flask(__name__)
+if os.path.isfile('config.py'):
+    app.config.from_object('config')
+if os.environ.get('DATABASE_URL'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
 
 
-test_locations = sample_locations.copy()
+class Location(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    link = db.Column(db.Text())
+
+    def __init__(self, name, link):
+        self.name = name
+        self.link = link
+
+    def __repr__(self):
+        return '<{} --> {}>'.format(self.name, self.link)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -18,18 +36,23 @@ def index():
     if request.method == 'POST':  # handle additions to list
         print(request)
         print(request.form)
-        test_locations[request.form['name']] = request.form['link']
-        # pdb.set_trace()
+        new_location = Location(request.form['name'], request.form['link'])
+        print('New location: {}'.format(new_location))
+        db.session.add(new_location)
+        db.session.commit()
         print('added {name}: {link}'.format(**request.form))
         return redirect('/')
     else:
-        return render_template('index.html', routes=test_locations)
+        locations = Location.query.all()
+        print('locations: {}'.format(locations))
+        return render_template('index.html', locations=locations)
 
 
 @app.route('/<location>')
 def find_route(location):
-    if (location in test_locations):
-        return redirect(test_locations[location])
+    result = Location.query.filter_by(name=location).first()
+    if result:
+        return redirect(result.link)
     else:
         return render_template('404.html'), 404
 
@@ -44,13 +67,14 @@ def remove_routes():
     if request.method == 'POST':  # remove items
         print(request.method)
         request_dict = dict(request.form)
-        # pdb.set_trace()
         for name, value in request_dict.items():
             print('removing {}'.format(name))
-            del test_locations[name]
+            Location.query.filter_by(name=name).delete()
+        db.session.commit()
         return redirect('/')
     else:
-        return render_template('remove_routes.html', routes=test_locations)
+        locations = Location.query.all()
+        return render_template('remove_routes.html', locations=locations)
 
 
 @app.route('/404')
