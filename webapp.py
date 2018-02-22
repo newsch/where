@@ -21,14 +21,23 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     link = db.Column(db.Text())
+    public = db.Column(db.Boolean(), default=True)
 
-    def __init__(self, name, link):
+    def __init__(self, name, link, public=True):
         self.name = name
         self.link = link
+        self.public = public
 
     def __repr__(self):
         return '<{} --> {}>'.format(self.name, self.link)
 
+def str_to_bool(data):
+    if data.lower() == 'true':
+        return True
+    elif data.lower() == 'false':
+        return False
+    else:
+        return None
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -36,7 +45,11 @@ def index():
     if request.method == 'POST':  # handle additions to list
         print(request)
         print(request.form)
-        new_location = Location(request.form['name'], request.form['link'])
+        new_location = Location(
+            request.form['name'],
+            request.form['link'],
+            str_to_bool(request.form['public'])
+        )
         print('New location: {}'.format(new_location))
         db.session.add(new_location)
         db.session.commit()

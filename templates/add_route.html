@@ -11,7 +11,13 @@
       <input type="text" name="name" placeholder="neat thing" autofocus required/><br>
       <label>where it goes</label><br>
       <input type="url" name="link" placeholder="http://link.place" required/><br>
-      <input type="submit" />
+      <label for="public">who can see it</label><br>
+      <input type="radio" id="publicYes" name="public" value="True" checked>
+      <label for="publicYes">public</label>
+      <input type="radio" id="publicNo" name="public" value="False">
+      <label for="publicNo">unlisted</label><br>
+      <br>
+      <input type="submit" value="add it"/>
     </form>
 </html>
   </body>
