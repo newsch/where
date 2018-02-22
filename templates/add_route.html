@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>add route</title>
+    <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <h1>add route</h1>
+    <h1>add a thing</h1>
     <form name="add" action="/" method="post">
-      <label>what it's called</label><br>
-      <input type="text" name="name" placeholder="neat thing" autofocus required/><br>
-      <label>where it goes</label><br>
+      <label for="name">what it's called</label><br>
+      <input type="text" name="name" placeholder="neatlink" pattern="[^' '/]+" title="no spaces or forward slashes please" autofocus required/><br>
+      <label for="link">where it goes</label><br>
       <input type="url" name="link" placeholder="http://link.place" required/><br>
       <label for="public">who can see it</label><br>
       <input type="radio" id="publicYes" name="public" value="True" checked>

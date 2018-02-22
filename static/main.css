@@ -1,0 +1,31 @@
+@media (min-width: 700px) {
+  html {
+    font-size: 175%;
+  }
+}
+* {
+  font-family: monospace;
+}
+h1 {
+  margin-bottom: 0;
+  /*font-size: 3rem;*/
+}
+ul {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+ul.tree {
+  list-style-type: none;
+  padding-left: 1em;
+  margin-top: 0;
+}
+ul.tree li:first-child::before {
+  content: '.\A├──';
+  white-space: pre;
+}
+ul.tree li::before {
+  content: "├── ";
+}
+ul.tree li:last-child::before {
+  content: "└── ";
+}

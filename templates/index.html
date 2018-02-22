@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>where</title>
+    <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
     <h1>where</h1>
-    <ul>
+    <ul class="tree">
       {% for location in locations %}
         <li>
-          <p>{{location.name}}: <a href={{location.link}}>{{location.link}}</a></p>
+          <a href=/{{location.name}}>/{{location.name}}</a> --> <a href={{location.link}}>{{location.link}}</a>
         </li>
       {% endfor %}
   </ul>
