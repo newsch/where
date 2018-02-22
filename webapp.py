@@ -55,8 +55,8 @@ def index():
         db.session.commit()
         print('added {name}: {link}'.format(**request.form))
         return redirect('/')
-    else:
-        locations = Location.query.all()
+    else:  # return index page
+        locations = Location.query.filter_by(public=True).order_by(Location.name)
         print('locations: {}'.format(locations))
         return render_template('index.html', locations=locations)
 
@@ -86,7 +86,7 @@ def remove_routes():
         db.session.commit()
         return redirect('/')
     else:
-        locations = Location.query.all()
+        locations = Location.query.order_by(Location.name).all()
         return render_template('remove_routes.html', locations=locations)
 
 
