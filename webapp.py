@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 """ main webapp for project """
 import os, re
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask import render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 from locations import sample_locations
 
 import pdb
 
+
+PROTECTED_NAMES = [
+    'add',
+    'admin',
+    'remove',
+    '404'
+]
 
 app = Flask(__name__)
 if os.path.isfile('config.py'):
@@ -17,6 +25,26 @@ if os.environ.get('DATABASE_URL'):
 db = SQLAlchemy(app)
 
 
+class InvalidName(Exception):
+    def __init__(self, message, status_code=400, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv
+
+
+@app.errorhandler(InvalidName)
+def handle_invalid_name(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
+
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
@@ -24,7 +52,10 @@ class Location(db.Model):
     public = db.Column(db.Boolean(), default=True)
 
     def __init__(self, name, link, public=True):
-        self.name = name
+        if name.lower() in PROTECTED_NAMES:
+            raise InvalidName('Given name is protected.')
+
+        self.name = name.lower()  # set name to lowercase
         self.link = link
         self.public = public
 
@@ -51,8 +82,14 @@ def index():
             str_to_bool(request.form['public'])
         )
         print('New location: {}'.format(new_location))
-        db.session.add(new_location)
-        db.session.commit()
+        try:
+            db.session.add(new_location)
+            db.session.commit()
+        except exc.IntegrityError as err:
+            db.session.rollback()
+            raise InvalidName('Name already exists.',payload={'message':err})
+        finally:
+            db.session.close()
         print('added {name}: {link}'.format(**request.form))
         return redirect('/')
     else:  # return index page
@@ -63,7 +100,7 @@ def index():
 
 @app.route('/<location>')
 def find_route(location):
-    result = Location.query.filter_by(name=location).first()
+    result = Location.query.filter_by(name=location.lower()).first()
     if result:
         return redirect(result.link)
     else:
