@@ -6,20 +6,22 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <h1>add a thing</h1>
-    <form name="add" action="/" method="post">
-      <label for="name">what it's called</label><br>
-      <input type="text" name="name" placeholder="neatlink" pattern="[^' '/]+" title="no spaces or forward slashes please" autofocus required/><br>
-      <label for="link">where it goes</label><br>
-      <input type="url" name="link" placeholder="http://link.place" required/><br>
-      <label for="public">who can see it</label><br>
-      <input type="radio" id="publicYes" name="public" value="True" checked>
-      <label for="publicYes">public</label>
-      <input type="radio" id="publicNo" name="public" value="False">
-      <label for="publicNo">unlisted</label><br>
-      <br>
-      <input type="submit" value="add it"/>
-    </form>
+    <main>
+      <h1>add a thing</h1>
+      <form name="add" action="/" method="post">
+        <label for="name">what it's called</label><br>
+        <input type="text" name="name" placeholder="neatlink" pattern="[^' '/]+" title="no spaces or forward slashes please" autofocus required/><br>
+        <label for="link">where it goes</label><br>
+        <input type="url" name="link" placeholder="http://link.place" required/><br>
+        <label for="public">who can see it</label><br>
+        <input type="radio" id="publicYes" name="public" value="True" checked>
+        <label for="publicYes">public</label>
+        <input type="radio" id="publicNo" name="public" value="False">
+        <label for="publicNo">unlisted</label><br>
+        <br>
+        <input type="submit" value="add it"/>
+      </form>
+    </main>
 </html>
   </body>
 </html>

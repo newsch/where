@@ -6,14 +6,19 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <h1>where</h1>
-    <ul class="tree">
-      {% for location in locations %}
+    <main>
+      <h1>where</h1>
+      <ul class="tree">
+        {% for location in locations %}
         <li>
           <a href=/{{location.name}}>/{{location.name}}</a> --> <a href={{location.link}}>{{location.link}}</a>
         </li>
-      {% endfor %}
-  </ul>
-  <a href="add">add</a>
-  </body>
+        {% endfor %}
+      </ul>
+      <a href="add">add</a>
+    </main>
+  <footer>
+    <p>view this project on <a href="https://github.com/newsch/where">GitHub</a>.</p>
+  </footer>
+</body>
 </html>
